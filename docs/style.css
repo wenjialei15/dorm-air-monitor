@@ -34,7 +34,8 @@ h1 { margin-block: 6px 7px; font-size: clamp(1.96rem, 5vw, 3.15rem); line-height
 .button { padding: 8px 11px; background: #fff; color: var(--ink); border: 1px solid #cad9cd; border-radius: 7px; font-size: .82rem; font-weight: 650; white-space: nowrap; cursor: pointer; }
 .button:hover { background: #eaf3ec; }
 .button.primary { color: #fff; border-color: var(--green); background: var(--green); }
-.button.primary:hover { background: #1c563f; }
+.button.primary:hover:not(:disabled) { background: #1c563f; }
+.button:disabled { opacity: .65; cursor: default; }
 .notice { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border: 1px solid #c9ded0; border-radius: 9px; background: #e5f0e7; color: #2c5844; }
 .notice-dot { background: currentColor; width: 7px; height: 7px; border-radius: 99px; margin-top: 7px; flex: 0 0 auto; }
 .notice strong { font-size: .9rem; }

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A software-only dorm air quality and ventilation simulator",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "license": "MIT",
   "engines": { "node": ">=22" },
   "scripts": {

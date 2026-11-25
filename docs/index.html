@@ -6,13 +6,15 @@
   <meta name="theme-color" content="#edf2eb">
   <meta name="description" content="无需传感器的宿舍空气质量模拟器，观察二氧化碳、温湿度及通风前后的变化。">
   <title>宿舍空气质量 · Dorm Air Monitor</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="app.js"></script>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="model.js?v=2" defer></script>
+  <script src="chart.js?v=2" defer></script>
+  <script src="app.js?v=2" defer></script>
 </head>
 <body>
   <header class="top">
     <div class="shell top-inner">
-      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">≋</span>Dorm Air Monitor</a>
+      <a class="brand" href="./index.html"><span class="brand-mark" aria-hidden="true">≋</span>Dorm Air Monitor</a>
       <a class="source-link" href="https://github.com/wenjialei15/dorm-air-monitor">GitHub <span aria-hidden="true">↗</span></a>
     </div>
   </header>
@@ -24,11 +26,12 @@
         <p>调整人数、开关窗，看看 CO₂ 浓度怎样变化。</p>
       </div>
       <div class="transport" aria-label="模拟时间控制">
-        <button class="button primary" id="play" type="button">开始模拟</button>
+        <button class="button primary" id="play" type="button" disabled>开始模拟</button>
         <button class="button" id="step" type="button">推进 5 分钟</button>
         <button class="button" id="reset" type="button">重置</button>
       </div>
     </section>
+    <noscript><p class="notice">请启用 JavaScript 后重新打开页面，即可运行模拟。</p></noscript>
 
     <div id="notice" class="notice" data-state="clear" role="status">
       <span class="notice-dot" aria-hidden="true"></span>
