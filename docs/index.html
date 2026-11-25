@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#edf2eb">
   <meta name="description" content="无需传感器的宿舍空气质量模拟器，观察二氧化碳、温湿度及通风前后的变化。">
   <title>宿舍空气质量 · Dorm Air Monitor</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
   <script src="model.js?v=2" defer></script>
   <script src="chart.js?v=2" defer></script>
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=3" defer></script>
 </head>
 <body>
   <header class="top">
@@ -64,11 +64,14 @@
       <section class="panel settings" aria-labelledby="settings-title">
         <div class="panel-head"><div><h2 id="settings-title">模拟设置</h2><p>每秒推进 2 模拟分钟</p></div></div>
         <div class="settings-body">
-          <div class="occupancy-label">
-            <label for="occupants">房间人数</label>
-            <output id="occupant-count" for="occupants">3 人</output>
+          <div class="occupancy-control" role="group" aria-labelledby="occupancy-label">
+            <span id="occupancy-label">房间人数</span>
+            <div class="occupancy-stepper">
+              <button id="occupants-minus" class="button" type="button" aria-label="减少人数" disabled>−</button>
+              <output id="occupant-count" for="occupants-minus occupants-plus" aria-live="polite">3 人</output>
+              <button id="occupants-plus" class="button" type="button" aria-label="增加人数" disabled>+</button>
+            </div>
           </div>
-          <input id="occupants" type="range" min="0" max="6" value="3">
           <div class="window-control">
             <div><strong>窗户</strong><p id="window-status">关闭</p></div>
             <button id="window" class="button" type="button">打开窗户</button>

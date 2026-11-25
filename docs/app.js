@@ -2,13 +2,14 @@
 
 (() => {
   const { drawChart, formatMinute } = globalThis.DormAirChart;
-  const { exampleRoom, readingsCsv, RECOVERY_GAP, RECOVERY_MINUTES } = globalThis.DormAirModel;
+  const { exampleRoom, readingsCsv, MAX_OCCUPANTS, RECOVERY_GAP, RECOVERY_MINUTES } = globalThis.DormAirModel;
 
   const byId = (id) => document.getElementById(id);
   const chart = byId("chart");
   const tooltip = byId("tooltip");
   const play = byId("play");
-  const occupants = byId("occupants");
+  const decreaseOccupants = byId("occupants-minus");
+  const increaseOccupants = byId("occupants-plus");
   const thresholdInput = byId("threshold");
   const delayInput = byId("delay");
   let room = exampleRoom();
@@ -86,6 +87,8 @@
     setText("temperature", latest.temperature_c.toFixed(1));
     setText("humidity", latest.humidity_pct.toFixed(1));
     setText("occupant-count", `${latest.occupants} 人`);
+    decreaseOccupants.disabled = latest.occupants === 0;
+    increaseOccupants.disabled = latest.occupants === MAX_OCCUPANTS;
     setText("window-status", latest.window_open ? "打开" : "关闭");
     setText("window", latest.window_open ? "关闭窗户" : "打开窗户");
     setText("play", timer === null ? "开始模拟" : "暂停模拟");
@@ -102,6 +105,11 @@
     timer = null;
   }
 
+  function adjustOccupants(change) {
+    room.setOccupants(room.occupants + change);
+    render();
+  }
+
   play.addEventListener("click", () => {
     if (timer === null) {
       room.advance();
@@ -116,12 +124,12 @@
     room = exampleRoom();
     pause();
     pointer = null;
-    occupants.value = room.occupants;
     thresholdInput.value = room.rule.threshold;
     delayInput.value = room.rule.delay;
     render();
   });
-  occupants.addEventListener("input", () => { room.setOccupants(occupants.valueAsNumber); render(); });
+  decreaseOccupants.addEventListener("click", () => adjustOccupants(-1));
+  increaseOccupants.addEventListener("click", () => adjustOccupants(1));
   byId("window").addEventListener("click", () => { room.setWindow(!room.windowOpen); render(); });
   byId("policy").addEventListener("submit", (event) => {
     event.preventDefault();
