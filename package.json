@@ -1,0 +1,17 @@
+{
+  "name": "dorm-air-monitor",
+  "version": "0.1.0",
+  "description": "A software-only dorm air quality and ventilation simulator",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "mqtt": "node scripts/publish.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "mqtt": "^5"
+  }
+}

@@ -1,0 +1,21 @@
+name: Test Dorm Air Monitor
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq mosquitto
+      - run: npm test
+        env:
+          MOSQUITTO_BIN: mosquitto

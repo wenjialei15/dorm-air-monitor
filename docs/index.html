@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf2eb">
+  <meta name="description" content="无需传感器的宿舍空气质量模拟器，观察二氧化碳、温湿度及通风前后的变化。">
+  <title>宿舍空气质量 · Dorm Air Monitor</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="shell top-inner">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">≋</span>Dorm Air Monitor</a>
+      <a class="source-link" href="https://github.com/wenjialei15/dorm-air-monitor">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="intro" aria-labelledby="title">
+      <div>
+        <p class="simulation-label">浏览器模拟</p>
+        <h1 id="title">宿舍空气质量</h1>
+        <p>调整人数、开关窗，看看 CO₂ 浓度怎样变化。</p>
+      </div>
+      <div class="transport" aria-label="模拟时间控制">
+        <button class="button primary" id="play" type="button">开始模拟</button>
+        <button class="button" id="step" type="button">推进 5 分钟</button>
+        <button class="button" id="reset" type="button">重置</button>
+      </div>
+    </section>
+
+    <div id="notice" class="notice" data-state="clear" role="status">
+      <span class="notice-dot" aria-hidden="true"></span>
+      <div><strong id="notice-title">暂未触发通风提醒</strong><span id="notice-detail"></span></div>
+    </div>
+
+    <dl class="metrics">
+      <div class="metric carbon"><dt>CO₂ 浓度</dt><dd><span id="co2">—</span> <small>ppm</small></dd></div>
+      <div class="metric"><dt>室内温度</dt><dd><span id="temperature">—</span> <small>°C</small></dd></div>
+      <div class="metric"><dt>相对湿度</dt><dd><span id="humidity">—</span> <small>%</small></dd></div>
+    </dl>
+
+    <div class="dashboard">
+      <section class="panel trend" aria-labelledby="trend-title">
+        <div class="panel-head">
+          <div><h2 id="trend-title">CO₂ 浓度趋势</h2><p>最近 60 模拟分钟</p></div>
+          <button id="export" class="button export" type="button">导出 CSV <span aria-hidden="true">↓</span></button>
+        </div>
+        <div class="plot">
+          <canvas id="chart" role="img" aria-label="模拟 CO₂ 浓度趋势"></canvas>
+          <output id="tooltip" class="tooltip" hidden></output>
+        </div>
+        <div class="legend" aria-label="图例">
+          <span><i class="swatch line" aria-hidden="true"></i>CO₂</span>
+          <span><i class="swatch dashed" aria-hidden="true"></i>提醒阈值</span>
+          <span><i class="swatch shaded" aria-hidden="true"></i>开窗时段</span>
+        </div>
+      </section>
+
+      <section class="panel settings" aria-labelledby="settings-title">
+        <div class="panel-head"><div><h2 id="settings-title">模拟设置</h2><p>每秒推进 2 模拟分钟</p></div></div>
+        <div class="settings-body">
+          <div class="occupancy-label">
+            <label for="occupants">房间人数</label>
+            <output id="occupant-count" for="occupants">3 人</output>
+          </div>
+          <input id="occupants" type="range" min="0" max="6" value="3">
+          <div class="window-control">
+            <div><strong>窗户</strong><p id="window-status">关闭</p></div>
+            <button id="window" class="button" type="button">打开窗户</button>
+          </div>
+          <form id="policy">
+            <label for="threshold">提醒阈值 <small>ppm</small></label>
+            <label for="delay">持续时间 <small>分钟</small></label>
+            <input id="threshold" type="number" min="700" max="2000" step="1" value="1000" required>
+            <input id="delay" type="number" min="1" max="30" step="1" value="5" required>
+            <button class="button" type="submit">应用提醒规则</button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <div class="details">
+      <section class="panel comparison" aria-labelledby="compare-title">
+        <div class="panel-head"><div><h2 id="compare-title">开窗前后</h2><p id="comparison-status">最近一次通风</p></div></div>
+        <dl class="comparison-grid">
+          <div><dt>开窗时</dt><dd><span id="before">—</span> <small>ppm</small></dd></div>
+          <div><dt id="after-label">关窗时</dt><dd><span id="after">—</span> <small>ppm</small></dd></div>
+          <div><dt>净变化</dt><dd><span id="change">—</span> <small>ppm</small></dd></div>
+        </dl>
+      </section>
+      <section class="panel events" aria-labelledby="event-title">
+        <div class="panel-head"><div><h2 id="event-title">事件记录</h2><p>最近 6 条 · 模拟时间</p></div></div>
+        <ol id="events"></ol>
+      </section>
+    </div>
+  </main>
+  <footer class="shell footer">
+    <p>读数来自模型。提醒阈值用于演示。</p>
+    <a href="https://github.com/wenjialei15/dorm-air-monitor#接入-home-assistant">MQTT 与 Home Assistant 接入 <span aria-hidden="true">↗</span></a>
+  </footer>
+</body>
+</html>
