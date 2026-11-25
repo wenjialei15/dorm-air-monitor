@@ -57,4 +57,4 @@ npm ci
 npm test
 ```
 
-设置 `MOSQUITTO_BIN` 为 Mosquitto 可执行文件路径，会额外启动临时 Broker，验证遥测、通风状态、Home Assistant Discovery 和保留消息。
+设置 `MOSQUITTO_BIN` 为 Mosquitto 2.x 可执行文件路径，会额外启动临时 Broker，验证遥测、通风状态、Home Assistant Discovery 和保留消息。

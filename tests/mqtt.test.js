@@ -1,10 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createConnection, createServer } from "node:net";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { test } from "node:test";
 import mqtt from "mqtt";
@@ -41,16 +38,13 @@ const executable = process.env.MOSQUITTO_BIN;
 test("live Mosquitto carries telemetry, HA discovery and retained availability", {
   skip: !executable, timeout: 20000,
 }, async (context) => {
-  const directory = await mkdtemp(join(tmpdir(), "dorm-air-mqtt-"));
   const port = await availablePort();
-  const config = join(directory, "mosquitto.conf");
-  await writeFile(config, `listener ${port} 127.0.0.1\nallow_anonymous true\npersistence false\n`);
-  const broker = spawn(executable, ["-c", config], { stdio: ["ignore", "ignore", "pipe"] });
+  // Mosquitto 2.x uses a loopback-only listener with this CLI option.
+  const broker = spawn(executable, ["-p", String(port)], { stdio: ["ignore", "ignore", "pipe"] });
   const brokerExit = once(broker, "exit");
   context.after(async () => {
     if (broker.exitCode === null && broker.signalCode === null) broker.kill();
     await brokerExit;
-    await rm(directory, { recursive: true, force: true });
   });
   let brokerLog = "";
   broker.stderr.on("data", (chunk) => { brokerLog += chunk; });
